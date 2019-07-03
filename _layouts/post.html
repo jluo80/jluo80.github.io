@@ -2,38 +2,36 @@
 layout: default
 ---
 
-<h1>
-  {{ page.title }}
-</h1>
+{% include base_path %}
 
 {% if page.image %}
-  <img src="{{ site.github.url }}/assets/img/{{ page.image }}">
+  <meta itemprop='og:image' content='{{ base_path }}{{ page.image }}'>
 {% endif %}
 
-{{ content }}
+<div class='o-wrapper'>
 
-<span class="post-date">
-  {{ site.data.settings.post_date_prefix }}
-  {% assign d = page.date | date: "%-d"  %}
-  {{ page.date | date: "%B" }}
-  {% case d %}
-    {% when '1' or '21' or '31' %}{{ d }}st
-    {% when '2' or '22' %}{{ d }}nd
-    {% when '3' or '23' %}{{ d }}rd
-    {% else %}{{ d }}th{% endcase %},
-  {{ page.date | date: "%Y" }}
-  by
-  {% if page.author %}
-    {{ page.author }}
-  {% else %}
-    {{ site.author }}
-  {% endif %}
-</span>
+  <div class='o-grid'>
+    <div class='o-grid__col'>
+      <article class='c-post' itemscope itemtype='http://schema.org/BlogPosting'>
 
-{% include social-sharing.html %}
+        <h1 class='c-post__title u-text-center'>{{ page.title }}</h1>
 
-{% include related-posts.html %}
+        <time class='c-post__date' datetime='{{ page.date | date_to_xmlschema }}' itemprop='datePublished'>{{ page.date | date: '%d %b %Y' }}</time>
 
-{% if site.data.settings.disqus.comments %}
-  {% include disqus.html %}
-{% endif %}
+        <div class='c-content' itemprop='articleBody'>
+          {% include page-image.html %}
+
+          {{ content }}
+        </div>
+
+        <div class='c-tags'>
+          {% for tag in page.tags %}
+            <a href='{{ site.baseurl }}/tag/{{ tag }}'>{{ tag }}</a>
+          {% endfor %}
+        </div>
+
+      </article>
+
+    </div>
+  </div>
+</div>
